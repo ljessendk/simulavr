@@ -145,7 +145,7 @@ AvrDevice_at90canbase::AvrDevice_at90canbase(unsigned ram_bytes,
     
     inputCapture1 = new ICaptureSource(PinAtPort(&portd, 4));
     timer1 = new HWTimer16_3C(this,
-                               new PrescalerMultiplexer(&prescaler013),
+                               new PrescalerMultiplexerExt(&prescaler013, PinAtPort(&portd, 6)),
                                1,
                                timerIrq1->getLine("TOV1"),
                                timerIrq1->getLine("OCF1A"),
@@ -303,6 +303,7 @@ AvrDevice_at90canbase::AvrDevice_at90canbase(unsigned ram_bytes,
     /* 0x76-0x77 reserved */
     /* 0x74-0x75 External memory control registers TODO */
     /* 0x72-0x73 reserved */
+    rw[0x71] = & timerIrq3->timsk_reg;
     rw[0x70]= & timerIrq2->timsk_reg;
     rw[0x6F]= & timerIrq1->timsk_reg;
     rw[0x6E]= & timerIrq0->timsk_reg;
